@@ -5,9 +5,11 @@
 <!-- api call -->
 {{ $headers := (dict) }}
 {{ if ne (os.Getenv "CYF_CURRICULUM_GITHUB_BEARER_TOKEN") "" }}
-  {{ $headers = merge $headers (dict "Authorization" (printf "Bearer %s" (getenv "CYF_CURRICULUM_GITHUB_BEARER_TOKEN"))) }}
+{{ $headers = merge $headers (dict "Authorization" (printf "Bearer %s" (getenv "CYF_CURRICULUM_GITHUB_BEARER_TOKEN"))) }}
 {{ end }}
 {{ $issues := getJSON $issuesUrl $headers }}
+{{ $scripts := resources.Get "scripts/issue-cloner-alerts.js" | resources.Minify }}
+<script src="{{ $scripts.Permalink }}" defer></script>
 <!-- if no object show error -->
 {{ if ne $issues nil }}
   <!-- range over issues list and pull out useful data -->
